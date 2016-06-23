@@ -28,22 +28,29 @@ namespace SQLServerToCSV
                 SqlCommand command = new SqlCommand(queryString, connection);
                 command.Connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
-                StreamWriter writer = new StreamWriter(filePath, false);
-
-                for (int i = 0; i < reader.FieldCount - 1; i++)
-                    writer.Write(String.Format("{0},", reader.GetName(i)));
-                writer.Write(reader.GetName(reader.FieldCount - 1));
-                writer.Write(writer.NewLine);
-
-                while (reader.Read())
+                try
                 {
+                    StreamWriter writer = new StreamWriter(filePath, false);
                     for (int i = 0; i < reader.FieldCount - 1; i++)
-                        writer.Write(String.Format("{0},", reader.GetValue(i)));
-                    writer.Write(reader.GetValue(reader.FieldCount - 1));
+                        writer.Write(String.Format("{0},", reader.GetName(i)));
+                    writer.Write(reader.GetName(reader.FieldCount - 1));
                     writer.Write(writer.NewLine);
-                }
 
-                writer.Close();
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount - 1; i++)
+                            writer.Write(String.Format("{0},", reader.GetValue(i)));
+                        writer.Write(reader.GetValue(reader.FieldCount - 1));
+                        writer.Write(writer.NewLine);
+                    }
+
+                    writer.Close();
+                }
+                catch (IOException)
+                {
+                    Console.WriteLine("IOException: Please close the file!");
+                    Console.ReadLine();
+                }
             }
         }
 
