@@ -14,51 +14,42 @@ namespace SQLServerToCSV
         static string dbServer = "XXXX";
         static string dbUser = "XXXX";
         static string dbPwd = "XXXX";
-        static string connectionTemplate = String.Format(
+        static string connectionString = String.Format(
             "data source={0};initial catalog={1};User ID={2};Password={3}", 
             dbServer, XXXX, dbUser, dbPwd);
-        static string sqlQuery = "SELECT XXXX FROM XXXX WHERE XXXX AND XXXX";
+        static string queryString = "SELECT XXXX FROM XXXX WHERE XXXX AND XXXX";
         static string winUser = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-        static string filePath = String.Format("C:\\Users\\{0}\\XXXX", winUser);
+        static string filePath = String.Format("C:\\Users\\{0}\\XXXX\\XXXX", winUser);
 
-        private static string SQLToString(string queryString, string connectionString)
+        private static void SQLToCSV()
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
                 command.Connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
-                StringBuilder builder = new StringBuilder();
-                try
-                {
-                    builder.Append(String.Format("{0}", reader.GetName(0)));
-                    for (int i = 1; i < reader.FieldCount; i++)
-                        builder.Append(String.Format(",{0}", reader.GetName(i)));
-                    while (reader.Read())
-                    {
-                        for (int i = 0; i < reader.FieldCount; i++)
-                            builder.Append(String.Format(",{0}", reader.GetValue(i)));
-                    }
-                }
-                finally
-                {
-                    reader.Close();
-                }
-                return builder.ToString();
-            }
-        }
+                StreamWriter writer = new StreamWriter(filePath, false);
 
-        private static void StringToFile(string csv, string path)
-        {
-            StreamWriter writer = new StreamWriter(path, false);
-            writer.Write(csv);
+                for (int i = 0; i < reader.FieldCount - 1; i++)
+                    writer.Write(String.Format("{0},", reader.GetName(i)));
+                writer.Write(reader.GetName(reader.FieldCount - 1));
+                writer.Write(writer.NewLine);
+
+                while (reader.Read())
+                {
+                    for (int i = 0; i < reader.FieldCount - 1; i++)
+                        writer.Write(String.Format("{0},", reader.GetValue(i)));
+                    writer.Write(reader.GetValue(reader.FieldCount - 1));
+                    writer.Write(writer.NewLine);
+                }
+
+                writer.Close();
+            }
         }
 
         static void Main(string[] args)
         {
-            string dbCSV = SQLToString(sqlQuery, connectionTemplate);
-            Console.WriteLine(dbCSV);
-            StringToFile(dbCSV, filePath);
+            SQLToCSV();
         }
     }
 }
