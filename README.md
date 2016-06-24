@@ -15,3 +15,10 @@
 * http://stackoverflow.com/questions/4963667/filestream-vs-differences-streamwriter
 
 * https://social.msdn.microsoft.com/Forums/en-US/103ddfde-9c38-4fef-a235-155f2f9c354e/whats-the-difference-between-filestream-and-streamwriter?forum=vblanguage
+
+
+* http://www.dotnetperls.com/sqldataadapter
+
+* http://stackoverflow.com/questions/5139770/escape-character-in-sql-server
+
+* http://stackoverflow.com/questions/6377454/escaping-tricky-string-to-csv-format
