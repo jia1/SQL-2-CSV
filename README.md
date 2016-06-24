@@ -22,3 +22,5 @@
 * http://stackoverflow.com/questions/5139770/escape-character-in-sql-server
 
 * http://stackoverflow.com/questions/6377454/escaping-tricky-string-to-csv-format
+
+* https://msdn.microsoft.com/en-us/library/system.configuration.appsettingsreader(v=vs.110).aspx
