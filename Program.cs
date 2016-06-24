@@ -8,10 +8,13 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 
+using System.Configuration;
+
 namespace SQLServerToCSV
 {
     class Program
     {
+        /*
         private static string dbServer = "";
         private static string dbUser = "";
         private static string dbPwd = "";
@@ -21,10 +24,13 @@ namespace SQLServerToCSV
         private static string tableName = "";
         private static string queryString = String.Format("SELECT * FROM {0}", tableName);
         private static string winUser = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-        private static string filePath = String.Format("C:\\Users\\{0}\\Desktop\\{1}.csv", winUser, tableName);
+        private static string subpath = "Desktop";
+        private static string filePath = String.Format("C:\\Users\\{0}\\{1}\\{2}.csv", winUser, subpath, tableName);
         private static bool appendOption = false;
-        
-        private static void SQLToCSV()
+        */
+
+        private static void SQLToCSV(string connectionString, string queryString, 
+            string filePath, bool appendOption)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -117,7 +123,26 @@ namespace SQLServerToCSV
 
         static void Main(string[] args)
         {
-            SQLToCSV();
+            AppSettingsReader reader = new AppSettingsReader();
+
+            string dbServer = (string)reader.GetValue("dbServer", typeof(string));
+            string dbUser = (string)reader.GetValue("dbUser", typeof(string));
+            string dbPwd = (string)reader.GetValue("dbPwd", typeof(string));
+            string connectionString = String.Format(
+                (string)reader.GetValue("connectionStringFormatString", typeof(string)), 
+                dbServer, , dbUser, dbPwd);
+            string tableName = (string)reader.GetValue("tableName", typeof(string));
+            string queryString = String.Format((string)reader.GetValue("queryStringFormatString", typeof(string)), tableName);
+            string winUser = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+            string subPath = (string)reader.GetValue("subPath", typeof(string));
+            string fullPath = String.Format(
+                (string)reader.GetValue("filePathFormatString", typeof(string)), 
+                winUser, subPath, tableName);
+            string appendOptionString = (string)reader.GetValue("appendOption", typeof(string));
+            bool appendOption = true;
+            bool.TryParse(appendOptionString, out appendOption);
+
+            SQLToCSV(connectionString, queryString, fullPath, appendOption);
         }
     }
 }
