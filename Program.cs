@@ -14,21 +14,6 @@ namespace SQLServerToCSV
 {
     class Program
     {
-        /*
-        private static string dbServer = "";
-        private static string dbUser = "";
-        private static string dbPwd = "";
-        private static string connectionString = String.Format(
-            "data source={0};initial catalog={1};User ID={2};Password={3}", 
-            dbServer, , dbUser, dbPwd);
-        private static string tableName = "";
-        private static string queryString = String.Format("SELECT * FROM {0}", tableName);
-        private static string winUser = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-        private static string subpath = "Desktop";
-        private static string filePath = String.Format("C:\\Users\\{0}\\{1}\\{2}.csv", winUser, subpath, tableName);
-        private static bool appendOption = false;
-        */
-
         private static void SQLToCSV(string connectionString, string queryString, 
             string filePath, bool appendOption)
         {
