@@ -27,9 +27,6 @@ namespace SQLServerToCSV
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                // SqlCommand command = new SqlCommand(queryString, connection);
-                // command.Connection.Open();
-                // SqlDataReader reader = command.ExecuteReader();
                 connection.Open();
                 using (SqlDataAdapter adapter = new SqlDataAdapter(
                     queryString, connection))
@@ -46,16 +43,6 @@ namespace SQLServerToCSV
                         writer.Write(reader.GetName(reader.FieldCount - 1));
                         writer.Write(writer.NewLine);
 
-                        /*
-                        while (reader.Read())
-                        {
-                            for (int i = 0; i < reader.FieldCount - 1; i++)
-                                writer.Write(String.Format("{0},", reader.GetValue(i)));
-                            writer.Write(reader.GetValue(reader.FieldCount - 1));
-                            writer.Write(writer.NewLine);
-                        }
-                        */
-
                         string colVal = string.Empty;
                         while (reader.Read())
                         {
@@ -63,15 +50,6 @@ namespace SQLServerToCSV
                             {
                                 colVal = String.Format("{0}", reader.GetValue(i));
                                 colVal = StringToCSVCell(colVal);
-
-                                /*
-                                if (colVal.Contains(','))
-                                {
-                                    colVal = colVal.Replace('\"', '\'');
-                                    colVal = String.Format("\"{0}\"", colVal);
-                                }
-                                */ 
-
                                 writer.Write(String.Format("{0},", colVal));
                             }
                             writer.Write(reader.GetValue(reader.FieldCount - 1));
